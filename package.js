@@ -1,6 +1,6 @@
 Package.describe({
-  name: 'joephuz:slack-api',
-  version: '0.0.3',
+  name: 'vatfree:slack-api',
+  version: '0.0.4',
   // Brief, one-line summary of the package.
   summary: 'Slack API written for meteor',
   // URL to the Git repository containing the source code for this package.
@@ -11,10 +11,10 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.1.0.2');
+  api.versionsFrom(['1.1.0.2', '2.0']);
   api.addFiles('slack-api.js', ['server']);
   api.export("SlackAPI", ['server']);
-  api.use('http', ['server']);
+  api.use('http@~2.0.0', ['server']);
 });
 
 Package.onTest(function(api) {
