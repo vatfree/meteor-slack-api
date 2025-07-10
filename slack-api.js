@@ -5,11 +5,22 @@ SlackAPI = {
     // base api call
     _apiCall: function(method, params, callback) {
         callback  = typeof callback  !== "undefined" ? callback  : false;
+        
+        // Extract token from params for Bearer auth
+        var token = params.token;
+        var bodyParams = _.omit(params, 'token');
+        
+        var options = {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            data: bodyParams
+        };
+        
         if(!callback){
             var future = new Future();
-            HTTP.get("https://slack.com/api/" + method, {
-                params: params
-            }, function(err, message) {
+            HTTP.post("https://slack.com/api/" + method, options, function(err, message) {
                 if(err) {
                     future.throw(err);
                 } else if(!message.data.ok){
@@ -21,9 +32,7 @@ SlackAPI = {
             })
             return future.wait();
         } else {
-            HTTP.get("https://slack.com/api/" + method, {
-                params: params
-            }, function(err, message) {
+            HTTP.post("https://slack.com/api/" + method, options, function(err, message) {
                 if(err) {
                     return callback(err)
                 } else if(!message.data.ok){
